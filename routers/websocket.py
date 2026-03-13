@@ -1,8 +1,8 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query, Depends
 from sqlalchemy.orm import Session
-from app.models.database import get_db
-from app.websocket.connection_manager import manager
-from app.utils.auth import decode_token
+from models.database import get_db
+from websocket.connection_manager import manager
+from utils.auth import decode_token
 import json
 from datetime import datetime
 
@@ -39,7 +39,7 @@ async def websocket_endpoint(
             message_type = message.get("type")
             
             if message_type == "action":
-                # Acción del usuario (ej: interacción en The Tester)
+                # Acción del usuario
                 action = message.get("action")
                 username = message.get("username", f"Usuario {user_id}")
                 action_data = message.get("data", {})

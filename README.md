@@ -1,99 +1,102 @@
 # Backend Prueba Humana
 
-Backend completo en Python/FastAPI para el juego multijugador **Prueba Humana**, con autenticación JWT, sistema de estadísticas, leaderboards y comunicación en tiempo real vía WebSocket.
+Backend 100% Python con FastAPI para el juego multijugador **Prueba Humana**, con autenticación JWT, estadísticas, leaderboards y comunicación en tiempo real vía WebSocket.
 
 ## 🚀 Características
 
-✅ **Autenticación JWT** - Registro e inicio de sesión seguros con tokens JWT  
-✅ **API REST** - Endpoints para estadísticas, leaderboards y gestión de usuarios  
-✅ **WebSocket** - Comunicación en tiempo real, mensajería y presencia  
+✅ **Autenticación JWT** - Registro e inicio de sesión seguros  
+✅ **API REST** - Endpoints para estadísticas y leaderboards  
+✅ **WebSocket** - Comunicación en tiempo real  
 ✅ **Leaderboards** - Globales, por dificultad y por tipo de prueba  
-✅ **Puntajes Ponderados** - Cálculo automático según multiplicadores de dificultad  
-✅ **Estadísticas Detalladas** - Análisis de rendimiento del jugador  
-✅ **Fallback Offline** - Soporte para modo offline en cliente  
-✅ **Documentación Completa** - Ejemplos en GDScript para Godot  
+✅ **Puntajes Ponderados** - Cálculo automático según dificultad  
+✅ **Estadísticas Detalladas** - Análisis de rendimiento  
+✅ **Documentación Completa** - Ejemplos en GDScript  
 
 ## 📋 Requisitos
 
-- Python 3.8 o superior
-- MySQL 5.7 o superior
-- pip (gestor de paquetes Python)
+- Python 3.8+
+- MySQL 5.7+
 
 ## 🔧 Instalación
 
-### 1. Clonar el repositorio
+### 1. Crear entorno virtual
 
 ```bash
-git clone <repository-url>
-cd prueba-humana-backend
-```
-
-### 2. Crear entorno virtual
-
-```bash
-# En Linux/macOS
-python3 -m venv venv
-source venv/bin/activate
-
-# En Windows
 python -m venv venv
+source venv/bin/activate  # Linux/macOS
+# o en Windows:
 venv\Scripts\activate
 ```
 
-### 3. Instalar dependencias
+### 2. Instalar dependencias
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configurar base de datos
+### 3. Configurar base de datos
 
-Crear base de datos MySQL:
-
-```sql
-CREATE DATABASE prueba_humana CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-### 5. Configurar variables de entorno
+Ejecuta `SCHEMA.sql` en tu MySQL:
 
 ```bash
-cp .env.example .env
+mysql -u root -p prueba_humana < SCHEMA.sql
 ```
 
-Editar `.env` con tu configuración:
+### 4. Configurar variables de entorno
+
+Crea `.env`:
 
 ```env
-DATABASE_URL=mysql+pymysql://usuario:contraseña@localhost:3306/prueba_humana
+DATABASE_URL=mysql+pymysql://root:password@localhost:3306/prueba_humana
 SECRET_KEY=tu-clave-secreta-muy-segura
 DEBUG=False
 ```
 
-### 6. Ejecutar servidor
+### 5. Ejecutar servidor
 
 ```bash
-python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-El servidor estará disponible en `http://localhost:8000`
+Accede a `http://localhost:8000/docs` para documentación interactiva.
 
-## 📚 Documentación
+## 📁 Estructura
 
-### Acceder a documentación interactiva
+```
+backend-prueba-humana/
+├── models/              # Modelos SQLAlchemy
+├── schemas/             # Esquemas Pydantic
+├── routers/             # Endpoints REST y WebSocket
+├── services/            # Lógica de negocio
+├── utils/               # Autenticación y dependencias
+├── websocket/           # Gestor de WebSocket
+├── config.py            # Configuración
+├── main.py              # Aplicación principal
+├── requirements.txt     # Dependencias
+├── SCHEMA.sql           # Esquema MySQL
+└── README.md            # Este archivo
+```
 
-- **Swagger UI**: `http://localhost:8000/docs`
-- **ReDoc**: `http://localhost:8000/redoc`
+## 🔐 Endpoints Principales
 
-### Documentación completa
+### Autenticación
+- `POST /auth/register` - Registrar usuario
+- `POST /auth/login` - Iniciar sesión
+- `GET /auth/me` - Usuario actual
+- `POST /auth/logout` - Cerrar sesión
 
-Ver [`API_DOCUMENTATION.md`](./API_DOCUMENTATION.md) para:
-- Descripción detallada de todos los endpoints
-- Ejemplos de solicitudes y respuestas
-- Ejemplos en GDScript para integración con Godot
-- Guía de despliegue en producción
+### Estadísticas
+- `POST /stats/register` - Registrar partida
+- `GET /stats/user` - Estadísticas del usuario
+- `GET /stats/leaderboard/global` - Leaderboard global
+- `GET /stats/leaderboard/difficulty/{difficulty}` - Por dificultad
+- `GET /stats/leaderboard/test/{test_type}` - Por tipo de prueba
 
-## 🎮 Integración con Godot
+### WebSocket
+- `WS /ws/connect` - Conexión en tiempo real
+- `GET /ws/online-users` - Usuarios conectados
 
-### Ejemplo básico de login
+## 🎮 Ejemplo en GDScript (Godot)
 
 ```gdscript
 extends Node
@@ -122,82 +125,25 @@ func _on_login_completed(result: int, response_code: int, headers: PackedStringA
             print("Login exitoso")
 ```
 
-Ver más ejemplos en [`API_DOCUMENTATION.md`](./API_DOCUMENTATION.md#ejemplos-en-gdscript)
+Ver `API_DOCUMENTATION.md` para más ejemplos.
 
-## 🏗️ Estructura del Proyecto
+## 📊 Multiplicadores de Dificultad
 
-```
-prueba-humana-backend/
-├── app/
-│   ├── models/           # Modelos SQLAlchemy
-│   ├── schemas/          # Esquemas Pydantic
-│   ├── routers/          # Rutas de la API
-│   ├── services/         # Lógica de negocio
-│   ├── utils/            # Utilidades (auth, dependencies)
-│   ├── websocket/        # Gestión de WebSocket
-│   ├── config.py         # Configuración
-│   └── main.py           # Aplicación principal
-├── requirements.txt      # Dependencias Python
-├── .env.example          # Ejemplo de variables de entorno
-├── API_DOCUMENTATION.md  # Documentación completa
-└── README.md             # Este archivo
-```
+- Dificultad 0: 1.0x
+- Dificultad 1: 1.3x
+- Dificultad 2: 1.7x
+- Dificultad 3: 2.2x
 
-## 🔐 Seguridad
+## 🔒 Seguridad
 
-- **Contraseñas**: Encriptadas con bcrypt
-- **Tokens JWT**: Expiración configurable
-- **CORS**: Configurable según necesidad
-- **Validación**: Todos los inputs validados con Pydantic
-
-### Recomendaciones para Producción
-
-1. Cambiar `SECRET_KEY` a una clave aleatoria fuerte
-2. Usar HTTPS/WSS en lugar de HTTP/WS
-3. Configurar CORS apropiadamente
-4. Implementar rate limiting
-5. Usar base de datos con contraseña fuerte
-6. Habilitar SSL en MySQL
-7. Configurar logs y monitoreo
-
-## 📊 Endpoints Principales
-
-### Autenticación
-- `POST /auth/register` - Registrar usuario
-- `POST /auth/login` - Iniciar sesión
-- `GET /auth/me` - Obtener usuario actual
-- `POST /auth/logout` - Cerrar sesión
-
-### Estadísticas
-- `POST /stats/register` - Registrar partida
-- `GET /stats/user` - Obtener estadísticas del usuario
-- `GET /stats/leaderboard/global` - Leaderboard global
-- `GET /stats/leaderboard/difficulty/{difficulty}` - Leaderboard por dificultad
-- `GET /stats/leaderboard/test/{test_type}` - Leaderboard por tipo de prueba
-
-### WebSocket
-- `WS /ws/connect` - Conexión WebSocket
-- `GET /ws/online-users` - Usuarios conectados
-
-## 🧪 Testing
-
-Ejecutar tests:
-
-```bash
-pytest
-```
+- Contraseñas encriptadas con bcrypt
+- Tokens JWT con expiración configurable
+- CORS configurable
+- Validación con Pydantic
 
 ## 📝 Licencia
 
 MIT
-
-## 👨‍💻 Autor
-
-Backend creado para el juego **Prueba Humana**
-
-## 📞 Soporte
-
-Para reportar bugs o sugerencias, abrir un issue en el repositorio.
 
 ---
 

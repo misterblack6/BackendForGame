@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
-from app.models.database import get_db
-from app.schemas.stats import GameStatCreate, GameStatResponse
-from app.services.stats_service import StatsService
-from app.utils.dependencies import get_current_user
+from models.database import get_db
+from schemas.stats import GameStatCreate
+from services.stats_service import StatsService
+from utils.dependencies import get_current_user
 
 router = APIRouter(prefix="/stats", tags=["Estadísticas"])
 

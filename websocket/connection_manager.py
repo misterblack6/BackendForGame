@@ -68,7 +68,7 @@ class ConnectionManager:
                 self.disconnect(user_id)
     
     async def broadcast_action(self, action_type: str, user_id: int, username: str, data: dict = None):
-        """Difundir acción de usuario (ej: interacción en The Tester)."""
+        """Difundir acción de usuario."""
         message = {
             "type": "user_action",
             "action": action_type,

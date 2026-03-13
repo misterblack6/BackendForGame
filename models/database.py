@@ -1,9 +1,8 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Boolean, Enum as SQLEnum
+from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
-import enum
-from app.config import settings
+from config import settings
 
 # Crear motor de base de datos
 engine = create_engine(
@@ -37,10 +36,10 @@ class GameStat(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, nullable=False, index=True)
     score = Column(Integer, nullable=False)
-    difficulty = Column(Integer, nullable=False)  # 0-3
-    time_taken = Column(Float, nullable=False)  # segundos
-    test_type = Column(String(50), nullable=False)  # Nombre de la prueba
-    weighted_score = Column(Float, nullable=False)  # Puntaje ponderado
+    difficulty = Column(Integer, nullable=False)
+    time_taken = Column(Float, nullable=False)
+    test_type = Column(String(50), nullable=False)
+    weighted_score = Column(Float, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
 
 class ActiveSession(Base):

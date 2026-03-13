@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from app.config import settings
-from app.routers import auth, stats, websocket
-from app.models.database import Base, engine
+from config import settings
+from routers import auth, stats, websocket
+from models.database import Base, engine
 import logging
 
 # Configurar logging

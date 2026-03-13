@@ -1,8 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import func, desc
-from app.models.database import GameStat, User
-from app.schemas.stats import GameStatCreate, LeaderboardEntry
-from datetime import datetime
+from models.database import GameStat, User
+from schemas.stats import GameStatCreate, LeaderboardEntry
 from fastapi import HTTPException, status
 
 # Multiplicadores de dificultad
